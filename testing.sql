@@ -86,3 +86,104 @@ ADD ID INT IDENTITY(1,1);
 
 ALTER TABLE [dbo].[exam4_ref]
 ADD ID INT IDENTITY(1,1);
+
+
+
+
+
+
+
+--------------------------------------------------------
+
+
+create database scd_testing
+go
+use scd_testing
+go
+
+
+CREATE TABLE org (
+    [CentreId] float,
+    [CentreName] nvarchar(255),
+    [PostCode] nvarchar(255),
+    [SquareMetres] float,
+    [NumberUnits] float,
+    [Details] nvarchar(255),
+)   
+
+
+CREATE TABLE ref (
+    [CentreId] float,
+    [CentreName] nvarchar(255),
+    [PostCode] nvarchar(255),
+    [SquareMetres] float,
+    [NumberUnits] float,
+    [Details] nvarchar(255),
+)   
+
+drop table if exists databasewb
+CREATE TABLE databasewb (
+    [CentreId] float,
+    [CentreName] nvarchar(255),
+    [PostCode] nvarchar(255),
+    [SquareMetres] float,
+    [NumberUnits] float,
+    [Details] nvarchar(255),
+    StartDate Datetime,
+    EndDate Datetime
+)   
+
+select * from databasewb
+
+drop table org
+drop table ref
+
+CREATE TABLE bronze_orders (
+    order_id VARCHAR(50),
+    customer_id VARCHAR(50),
+    amount VARCHAR(50),
+    order_date VARCHAR(50),
+    status VARCHAR(50)
+);
+
+
+
+INSERT INTO source_orders VALUES
+('1016','C016','1200.50','2026-02-14 18:00:00','PAID'),
+('1017','C017','NULL','2026-02-14','PAID'),
+('1018','C018','1300,75','14-02-2026','PAID'),
+('1019','','1400','2026-02-14','PAID'),
+('1020','C020','-200','INVALID','FAILED');
+
+
+select * from bronze_orders
+
+CREATE TABLE silver_orders (
+    order_id INT,
+    customer_id VARCHAR(50),
+    amount DECIMAL(18,2),
+    order_date DATETIME,
+    status VARCHAR(50)
+);
+
+
+select * from silver_orders
+
+truncate table silver_orders
+
+
+
+
+
+drop table gold_customer_summary
+CREATE TABLE gold_customer_summary (
+    customer_id VARCHAR(50) PRIMARY KEY,
+    total_spent DECIMAL(18,2),
+    last_order_date DATETIME
+);
+
+drop table gold_status_summary2
+CREATE TABLE gold_status_summary2 (
+    status VARCHAR(50),
+    total_spent DECIMAL(18,2),
+);
